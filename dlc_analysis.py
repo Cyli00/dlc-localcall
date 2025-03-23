@@ -16,7 +16,8 @@ def select_model():
     
     while True:
         try:
-            choice = int(input("\nPlease select a model (enter the number): "))
+            # 默认选择选项5
+            choice = int(input("\nPlease select a model (enter the number, default is 5): ") or "5")
             if 1 <= choice <= len(MODELOPTIONS):
                 return MODELOPTIONS[choice-1]
             else:
@@ -66,9 +67,8 @@ def extract_roi_from_video(video_path):
     
     return roi_video_path, videotype
 
-def setup_dlc_project(video_path, model_name='mouse_pupil_vclose', project_name='myDLC_modelZoo', experimenter_name='teamDLC'):
+def setup_dlc_project(video_path, project_name, experimenter_name, model_name, weight_folder):
     """Setup DLC project with pretrained model, avoiding redundant downloads."""
-    
     # First extract ROI from video
     roi_video_path, videotype = extract_roi_from_video(video_path)
     
@@ -76,15 +76,39 @@ def setup_dlc_project(video_path, model_name='mouse_pupil_vclose', project_name=
     if model_name in MODELOPTIONS:
         cwd = os.getcwd()
         
+        # 处理项目文件夹已存在的情况
+        from datetime import datetime as dt
+        date = dt.today().strftime("%Y-%m-%d")
+        
+        # 检查是否存在编号的实验者名称
+        base_experimenter = experimenter_name
+        counter = 1
+        
+        while True:
+            experimenter_name = f"{base_experimenter}{counter:02d}"
+            # 构建潜在的项目路径
+            potential_project_path = os.path.join(os.getcwd(), 
+                                                f"{project_name}-{experimenter_name}-{date}")
+            
+            if not os.path.exists(potential_project_path):
+                break
+            # 如果路径已存在，尝试新的编号
+            counter += 1
+            print(f"Project folder already exists, trying with new experimenter name: {experimenter_name}")
+        
         # 创建新项目
-        cfg = deeplabcut.create_new_project(
-            project_name,
-            experimenter_name,
-            [roi_video_path],
-            working_directory=None,
-            copy_videos=False,
-            videotype=videotype
-        )
+        try:
+            cfg = deeplabcut.create_new_project(
+                project_name,
+                experimenter_name,
+                [roi_video_path],
+                working_directory=None,
+                copy_videos=False,
+                videotype=videotype
+            )
+        except Exception as e:
+            print(f"Error creating project: {e}")
+            return "N/A", "N/A"
         
         config = auxiliaryfunctions.read_config(cfg)
         
@@ -103,10 +127,8 @@ def setup_dlc_project(video_path, model_name='mouse_pupil_vclose', project_name=
         test_dir.mkdir(parents=True, exist_ok=True)
         
         # 直接使用本地模型文件
-        weight_folder = os.path.join("/home/cyli00/gitRepo/dlc_test_code/models/pretrained", model_name)
         if not os.path.exists(weight_folder):
             raise Exception(f"Local model not found in {weight_folder}")
-            
         print("Using local model from:", weight_folder)
         
         # 复制模型文件到训练目录
@@ -198,5 +220,14 @@ if __name__ == "__main__":
     print(f"\nSelected model: {model_name}")
     
     # Setup project with selected model
-    config_path, train_config_path = setup_dlc_project(video_path, model_name=model_name)
+    project_name = "DLC_project"
+    experimenter_name = "user"
+    weight_folder = "/home/cyli00/gitProjects/dlc_test_code/models/pretrained/mouse_pupil_vclose"
+    
+    config_path, train_config_path = setup_dlc_project(
+        video_path, 
+        project_name=project_name, 
+        experimenter_name=experimenter_name, 
+        model_name=model_name,
+        weight_folder=weight_folder)
     print("Project created with config at:", config_path) 
