@@ -1,4 +1,4 @@
-# Deeplabcut-LocalAnalysis
+# dlc-localcall
 防止每次分析模型时重复访问huggingface下载模型。
 
 # 安装miniforge并且配置环境变量
