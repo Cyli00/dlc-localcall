@@ -17,7 +17,7 @@ def displayedparts(cfg):
     return pose_index
 
 
-def plot_distance(dist, ax, time_vector)
+def plot_distance(dist, ax, time_vector):
     """
     绘制距离随时间变化的图形
     :param dist: 距离数据
