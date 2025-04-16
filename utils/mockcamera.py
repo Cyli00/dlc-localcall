@@ -26,9 +26,9 @@ class virtualcamera:
         self.last_frame_time = 0
         
         if not self.cap.isOpened():
-            raise ValueError(f"无法打开视频: {video_path}")
+            raise ValueError(f"Failed to open video: {video_path}")
             
-        print(f"视频已加载 - FPS: {self.original_fps}, 目标FPS: {self.target_fps}")
+        print(f"Video loaded - FPS: {self.original_fps}, target FPS: {self.target_fps}")
     
     def read(self):
         """
@@ -98,6 +98,48 @@ def demo():
         # 释放资源
         mock_cam.release()
         cv2.destroyAllWindows()
+        
+def select_extract_roi(video_path):
+    """
+    从相机获取一帧用于ROI选择，然后返回一个函数用于后续提取ROI区域
+    
+    参数:
+        camera: OpenCV相机对象（cv2.VideoCapture或virtualcamera）
+        
+    返回:
+        extract_roi: 一个函数，可以从任何帧中提取ROI区域
+    """
+    # Open video and get first frame
+    cap = cv2.VideoCapture(video_path)
+    ret, frame = cap.read()
+    cap.release()
+    
+    if not ret:
+        raise Exception("Could not read video file")
+        
+    # Select ROI
+    # print("Select a ROI and then press SPACE or ENTER button!")
+    # print("Cancel the selection process by pressing c button!")
+    roi = cv2.selectROI("Select ROI", frame, fromCenter=False, showCrosshair=False)
+    cv2.destroyAllWindows()
+    
+    # Get ROI coordinates 
+    x, y, w, h = roi
+    
+    # 检查是否选择了有效的ROI
+    if w <= 0 or h <= 0:
+        print("No ROI was selected, would return original frame.")
+        # 返回一个函数，该函数不修改输入帧
+        return lambda frame: frame
+    
+    print(f"ROI selected: x={x}, y={y}, w={w}, h={h}")
+    
+    # 返回一个函数，用于从任何帧中提取ROI
+    def extract_roi(frame):
+        """从frame中提取ROI区域"""
+        return frame[int(y):int(y+h), int(x):int(x+w)]
+    
+    return extract_roi
 
 
 if __name__ == "__main__":
