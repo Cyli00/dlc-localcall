@@ -1,31 +1,26 @@
-# Project definitions (do not edit)
+    # Project definitions (do not edit)
 Task:
 scorer:
 date:
 multianimalproject:
 identity:
 
+    # Project path (change when moving around)
+project_path: /home/cyli00/gitProjects/dlc-localcall/pupil_resnet
 
-# Project path (change when moving around)
-project_path: /home/cyli00/myProjects/dlc-code/pupil_resnet
-
-
-# Default DeepLabCut engine to use for shuffle creation (either pytorch or tensorflow)
-engine: tensorflow
-
-
-# Annotation data set configuration (and individual video cropping parameters)
+    # Annotation data set configuration (and individual video cropping parameters)
 video_sets:
 bodyparts:
-
-
-# Fraction of video to start/stop when extracting frames for labeling/refinement
+- Lpupil
+- Dpupil
+- Rpupil
+- Vpupil
+    # Fraction of video to start/stop when extracting frames for labeling/refinement
 start:
 stop:
 numframes2pick:
 
-
-# Plotting configuration
+    # Plotting configuration
 skeleton: []
 skeleton_color: black
 pcutoff:
@@ -33,33 +28,28 @@ dotsize:
 alphavalue:
 colormap:
 
-
-# Training,Evaluation and Analysis configuration
-TrainingFraction:
+    # Training,Evaluation and Analysis configuration
+TrainingFraction: 
 iteration:
 default_net_type:
 default_augmenter:
 snapshotindex:
-detector_snapshotindex: -1
 batch_size:
-detector_batch_size: 1
 
-
-# Cropping Parameters (for analysis and outlier frame detection)
+    # Cropping Parameters (for analysis and outlier frame detection)
 cropping:
-#if cropping is true for analysis, then set the values here:
+    #if cropping is true for analysis, then set the values here:
 x1:
 x2:
 y1:
 y2:
 
-
-# Refinement configuration (parameters from annotation dataset configuration also relevant in this stage)
+    # Refinement configuration (parameters from annotation dataset configuration also relevant in this stage)
 corner2move2:
 move2corner:
-
-
-# Conversion tables to fine-tune SuperAnimal weights
+engine: tensorflow
+detector_snapshotindex: -1
+detector_batch_size: 1
 SuperAnimalConversionTables:
 all_joints:
 - - 0
@@ -92,8 +82,7 @@ deterministic: false
 display_iters: 1000
 fg_fraction: 0.25
 global_scale: 0.8
-init_weights: E:\Pupil Recordings\PupilTracking_YangLab-Jim 
-  McBurney-Lin-2020-05-14\dlc-models\iteration-0\PupilTracking_YangLabMay14-trainset95shuffle1\train\snapshot-650000
+init_weights: /home/cyli00/gitProjects/dlc-localcall/pupil_resnet/snapshot-650000
 intermediate_supervision: false
 intermediate_supervision_layer: 12
 leftwidth: 400
@@ -135,8 +124,7 @@ scale_jitter_lo: 0.5
 scale_jitter_up: 1.25
 scoremap_dir: test
 shuffle: true
-snapshot_prefix: E:\Pupil Recordings\PupilTracking_YangLab-Jim 
-  McBurney-Lin-2020-05-14\dlc-models\iteration-0\PupilTracking_YangLabMay14-trainset95shuffle1\train\snapshot
+snapshot_prefix: /home/cyli00/gitProjects/dlc-localcall/pupil_resnet/snapshot
 stride: 8.0
 topheight: 400
 weigh_negatives: false
