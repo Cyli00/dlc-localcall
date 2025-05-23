@@ -20,4 +20,3 @@ mamba create -n dlc python=3.10
 mamba activate dlc
 mamba install deeplabcut[tf,modelzoo] # or mamba install "deeplabcut[tf,modelzoo]"
 ```
-```
