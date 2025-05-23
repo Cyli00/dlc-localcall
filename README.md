@@ -1,20 +1,23 @@
 # dlc-localcall
-防止每次分析模型时重复访问huggingface下载模型。
+Prevent repeated access to Hugging Face for model downloads during each model analysis.
 
-# 安装miniforge并且配置环境变量
+# Install Miniforge and Configure Environment Variables
 [conda-forge/miniforge: A conda-forge distribution.](https://github.com/conda-forge/miniforge)
-*推荐使用 wsl2*
+*Recommended to use WSL2*
 
-# 安装cuda并且配置环境变量
+# Install CUDA and Configure Environment Variables
 [CUDA Toolkit 12.8 Downloads | NVIDIA Developer](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_network)
-*wsl2 推荐使用 runfile，安装完毕后根据指令在 .bashrc 或者 .zshrc 配置环境变量*
+*For WSL2, it is recommended to use the runfile installer. After installation, follow the instructions to configure environment variables in your `.bashrc` or `.zshrc`.*
 
-# 安装瞳孔识别工具包
-## 创建 dlc 环境
-`mamba create -n dlc python=3.10`
+# Install Pupil Detection Toolkit
+## Create the dlc Environment
+```bash
+mamba create -n dlc python=3.10
+```
 
-## 安装 dlc tensorflow version
-```undefined
+## Install dlc TensorFlow Version
+```bash
 mamba activate dlc
-mamba install deeplabcut[tf,modelzoo] # 或者 mamba install "deeplabcut[tf,modelzoo]
+mamba install deeplabcut[tf,modelzoo] # or mamba install "deeplabcut[tf,modelzoo]"
+```
 ```
